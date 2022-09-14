@@ -1,4 +1,4 @@
-package com.example.springRestAPI;
+package com.example.springRestAPI.helloworld;
 
 // lombok
 
