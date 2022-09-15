@@ -44,4 +44,13 @@ public class UserController {
         // rest요청에맞게 상태 코드를 반환해주는 것이 정석
         return ResponseEntity.created(location).build();
     }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        User user = service.deleteById(id);
+
+        if (user == null) {
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
+    }
 }
