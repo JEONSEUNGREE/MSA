@@ -4,3 +4,8 @@ server:
 logging:
   level:
     org.springframework: DEBUG
+
+# 언어 변경 빈등록
+spring:
+  messages:
+    basename: message
