@@ -16,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 //@JsonIgnoreProperties(value = {"password"})
-@JsonFilter("UserInfo") // 컨트롤러 호출시 필터 사용해야 오류가 발생하지않음
+//@JsonFilter("UserInfo") // 컨트롤러 호출시 필터 사용해야 오류가 발생하지않음
 public class User {
 
     private Integer id;
