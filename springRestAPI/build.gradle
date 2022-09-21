@@ -25,6 +25,10 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
 	// Hateoas는 하이퍼 미디어(파일이나 영상 등)를 REST API의 상태정보를 관리하기 위한 메커니즘으로 활용하는 것이다. 쉽게 말해, 텍스트 아닌 리소스도 관리할 수 있다.
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+//  swagger
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
