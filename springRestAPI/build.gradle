@@ -32,7 +32,8 @@ dependencies {
 //	implementation group: 'org.springframework.boot', name: 'spring-boot-actuator-autoconfigure', version: '2.7.2'
 //	HAL BROWSER 하이퍼텍스트
 	implementation 'org.springframework.data:spring-data-rest-hal-browser:3.3.9.RELEASE'
-
+//  시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security:'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
