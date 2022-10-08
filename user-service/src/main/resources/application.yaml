@@ -12,6 +12,9 @@ spring:
         web-allow-others: true
 #        접속 엔드포인트
       path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
 
 eureka:
   instance:
