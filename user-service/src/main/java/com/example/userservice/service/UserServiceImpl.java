@@ -6,6 +6,7 @@ import com.example.userservice.jpa.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,8 +14,15 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
+
+    private BCryptPasswordEncoder passwordEncoder;
+
+    // BCryptPasswordEncoder는 초기 스프링 구동시 초기화 되도록 설정
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -25,7 +33,7 @@ public class UserServiceImpl implements UserService {
 //      설정 강력하게 딱 맞아 떨어져야 변환
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         User user = mapper.map(userDto, User.class);
-        user.setEncryptedPwd("encrypted_password");
+        user.setEncryptedPwd(passwordEncoder.encode(userDto.getPwd()));
         userRepository.save(user);
 
         UserDto returnUserDto = mapper.map(user, UserDto.class);
