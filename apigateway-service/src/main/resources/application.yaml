@@ -22,6 +22,12 @@ spring:
       #      ??? ?? ??? ?? ???? ??????
 #       ??? : prefilter ??? : postfilter
       routes:
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order-service/**
+          filters:
+#            - CustomFilter
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
@@ -58,11 +64,11 @@ spring:
           filters:
 #            - AddRequestHeader=second-request, second-request-header2
 #            - AddResponseHeader=second-response, second-response-header2
-             - name: CustomFilter
-             - name: LoggingFilter
-               args:
-                 baseMessage: LoggingFilter Test
-                 preLogger: true
-                 postLogger: true
+#             - name: CustomFilter
+#             - name: LoggingFilter
+#               args:
+#                 baseMessage: LoggingFilter Test
+#                 preLogger: true
+#                 postLogger: true
 
 ## Netty ??? ?? tomcat? ??? ??? ?? ??
