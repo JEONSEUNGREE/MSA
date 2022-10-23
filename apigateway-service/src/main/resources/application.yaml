@@ -19,9 +19,35 @@ spring:
             baseMessage: Spring Cloug GateWay GLobal Filter
             preLogger: true
             postLogger: true
-      #      ??? ?? ??? ?? ???? ??????
-#       ??? : prefilter ??? : postfilter
       routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+
         - id: order-service
           uri: lb://ORDER-SERVICE
           predicates:
@@ -33,28 +59,13 @@ spring:
           predicates:
             - Path=/catalog-service/**
           filters:
-#            - CustomFilter
-        - id: user-service
-#          ??? ????? localhost? ??????? ?? ??? ??? ?? ?? ??? ??? ?????? ??
-#          lb = loadBalance
-          uri: lb://USER-SERVICE
-#       ??? ?? ?? http://localhost:8081/first-service/** ? ??? ???? ?
-#       predicates? ?? ?????? ???
-          predicates:
-            - Path=/user-service/**
-          filters:
-#            - CustomFilter
+
 
         - id: first-service
-#          ??? ????? localhost? ??????? ?? ??? ??? ?? ?? ??? ??? ?????? ??
           uri: lb://MY-FIRST-SERVICE
-#       ??? ?? ?? http://localhost:8081/first-service/** ? ??? ???? ?
-#       predicates? ?? ?????? ???
           predicates:
             - Path=/first-service/**
           filters:
-#            - AddRequestHeader=first-request, first-request-header2
-#            - AddResponseHeader=first-response, first-response-header2
             - CustomFilter
 
         - id: second-service
@@ -62,13 +73,3 @@ spring:
           predicates:
             - Path=/second-service/**
           filters:
-#            - AddRequestHeader=second-request, second-request-header2
-#            - AddResponseHeader=second-response, second-response-header2
-#             - name: CustomFilter
-#             - name: LoggingFilter
-#               args:
-#                 baseMessage: LoggingFilter Test
-#                 preLogger: true
-#                 postLogger: true
-
-## Netty ??? ?? tomcat? ??? ??? ?? ??

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user-service")
+//@RequestMapping("/user-service") api-gateway 설정으로 제거
 public class UserController {
 
     private Environment env;
