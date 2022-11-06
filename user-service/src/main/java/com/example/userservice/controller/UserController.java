@@ -39,7 +39,7 @@ public class UserController {
         return String.format("It's Working in User Service PORT %s", env.getProperty("local.server.port"));
     }
 
-    @GetMapping("/welcome")
+        @GetMapping("/welcome")
     public String welcome() {
 //        return env.getProperty("greeting.message");
         return greeting.getMessage();

@@ -1,10 +1,16 @@
 package com.example.userservice.security;
 
+import com.example.userservice.dto.UserDto;
+import com.example.userservice.service.UserService;
 import com.example.userservice.vo.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -15,6 +21,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    private UserService userService;
+
+    private Environment env;
+
+    public AuthenticationFilter(AuthenticationManager authenticationManager, UserService userService, Environment env) {
+        super.setAuthenticationManager(authenticationManager);
+        this.userService = userService;
+        this.env = env;
+    }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
@@ -34,6 +51,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        super.successfulAuthentication(request, response, chain, authResult);
+
+        String userName = ((User) authResult.getPrincipal()).getUsername();
+        UserDto userDetails = userService.getUserDetailsByEmail(userName);
     }
 }
