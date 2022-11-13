@@ -6,6 +6,7 @@ import com.example.userservice.service.UserService;
 import com.example.userservice.vo.Greeting;
 import com.example.userservice.vo.RequestUser;
 import com.example.userservice.vo.ResponseUser;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @RestController
 //@RequestMapping("/user-service") api-gateway 설정으로 제거
+@Slf4j
 public class UserController {
 
     private Environment env;
@@ -36,7 +38,12 @@ public class UserController {
 
     @GetMapping("/health_check")
     public String status() {
-        return String.format("It's Working in User Service PORT %s", env.getProperty("local.server.port"));
+        return String.format(
+                          " local.server.port" + env.getProperty("local.server.port")
+                        + " server.port" + env.getProperty("server.port")
+                        + " token secret" + env.getProperty("token.secret")
+                        + " token expiration time" + env.getProperty("token.expiration_time")
+        );
     }
 
         @GetMapping("/welcome")
