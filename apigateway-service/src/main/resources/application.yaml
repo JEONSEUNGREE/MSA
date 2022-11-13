@@ -48,7 +48,6 @@ spring:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
 
-
         - id: order-service
           uri: lb://ORDER-SERVICE
           predicates:
@@ -74,3 +73,7 @@ spring:
           predicates:
             - Path=/second-service/**
           filters:
+
+
+token:
+  secret: user_token
