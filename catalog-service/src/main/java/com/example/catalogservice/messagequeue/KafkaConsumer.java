@@ -21,7 +21,7 @@ public class KafkaConsumer {
     @Autowired
     CatalogRepository repository;
 
-    @KafkaListener(topics = "example-catalog-topic")
+    @KafkaListener(topics = "example-category-topic")
     public void updateQty(String kafkaMessage) {
         log.info("Kafka Message: ->" + kafkaMessage);
 
@@ -37,6 +37,7 @@ public class KafkaConsumer {
 
         Catalog catalog = repository.findByProductId((String) map.get("productId"));
 
+        log.info("kafkaMessage Receive : " + map.get("productId"));
         if (catalog != null) {
             catalog.setStock(catalog.getStock() - (Integer) map.get("qty"));
             repository.save(catalog);
