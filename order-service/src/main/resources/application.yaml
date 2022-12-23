@@ -12,15 +12,20 @@ spring:
       path: /h2-console
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     generate-ddl: true
-    database: h2
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: MYSQL
     defer-datasource-initialization: true
 
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
+#    driver-class-name: org.h2.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
+
+    url: jdbc:mysql://localhost:3306/mydb?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: khweb
+    password: khWeb@123
 # jdbc:mysql://localhost:3306/mydb?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
 eureka:
   instance:

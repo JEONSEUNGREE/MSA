@@ -1,16 +1,23 @@
 package com.example.orderservice.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import javax.persistence.Column;
 
 @Data
-public class OrderDto implements Serializable {
+@NoArgsConstructor
+public class OrderDto {
+
     private String productId;
+
     private Integer qty;
+
     private Integer unitPrice;
+
     private Integer totalPrice;
 
-    private String orderId;
     private String userId;
+
+    private String orderId;
 }

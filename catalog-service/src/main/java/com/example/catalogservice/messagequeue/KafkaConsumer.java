@@ -37,7 +37,6 @@ public class KafkaConsumer {
 
         Catalog catalog = repository.findByProductId((String) map.get("productId"));
 
-        log.info("kafkaMessage Receive : " + map.get("productId"));
         if (catalog != null) {
             catalog.setStock(catalog.getStock() - (Integer) map.get("qty"));
             repository.save(catalog);

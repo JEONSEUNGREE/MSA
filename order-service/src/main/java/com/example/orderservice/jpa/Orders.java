@@ -15,9 +15,9 @@ public class Orders implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
-    @Column(nullable = false,length = 120, unique = true)
+    @Column(nullable = false,length = 20)
     private String productId;
 
     @Column(nullable = false)
@@ -29,10 +29,10 @@ public class Orders implements Serializable {
     @Column(nullable = false)
     private Integer totalPrice;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String orderId;
 
     @Column(nullable = false, updatable = false, insertable = false)

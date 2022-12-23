@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/order-service")
@@ -38,8 +39,8 @@ public class OrderController {
                 env.getProperty("local.server.port"));
     }
 
-    @PostMapping("/{orderId}/orders")
-    public ResponseEntity<ResponseOrder> createOrder(@PathVariable("orderId") String orderId,
+    @PostMapping("/{userId}/orders")
+    public ResponseEntity<ResponseOrder> createOrder(@PathVariable("userId") String userId,
                                                      @RequestBody RequestOrder orderDetails) {
 
         ModelMapper mapper = new ModelMapper();
@@ -47,13 +48,19 @@ public class OrderController {
 
         /* jpa */
         OrderDto orderDto = mapper.map(orderDetails, OrderDto.class);
-        orderDto.setUserId(orderId);
-        OrderDto createdOrder = orderService.createOrder(orderDto);
+        orderDto.setUserId(userId);
+//        OrderDto createdOrder = orderService.createOrder(orderDto);
 
-        ResponseOrder responseOrder = mapper.map(createdOrder, ResponseOrder.class);
+
+        /* kafka */
+        orderDto.setOrderId(UUID.randomUUID().toString());
+        orderDto.setTotalPrice(orderDetails.getQty() * orderDetails.getUnitPrice());
 
         /* send this orderto the kafka */
         kafkaProducer.send("example-category-topic", orderDto);
+        kafkaProducer.send("example-category-topic", orderDto);
+
+        ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
     }
