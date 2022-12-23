@@ -4,6 +4,7 @@ package com.example.orderservice.controller;
 import com.example.orderservice.dto.OrderDto;
 import com.example.orderservice.jpa.Orders;
 import com.example.orderservice.messagequeue.KafkaProducer;
+import com.example.orderservice.messagequeue.OrderProducer;
 import com.example.orderservice.service.OrderService;
 import com.example.orderservice.vo.RequestOrder;
 import com.example.orderservice.vo.ResponseOrder;
@@ -24,13 +25,14 @@ public class OrderController {
 
     Environment env;
     OrderService orderService;
-
     KafkaProducer kafkaProducer;
+    OrderProducer orderProducer;
 
-    public OrderController(Environment env, OrderService orderService, KafkaProducer kafkaProducer) {
+    public OrderController(Environment env, OrderService orderService, KafkaProducer kafkaProducer, OrderProducer orderProducer) {
         this.env = env;
         this.orderService = orderService;
         this.kafkaProducer = kafkaProducer;
+        this.orderProducer = orderProducer;
     }
 
     @GetMapping("/health_check")
@@ -58,7 +60,7 @@ public class OrderController {
 
         /* send this orderto the kafka */
         kafkaProducer.send("example-category-topic", orderDto);
-        kafkaProducer.send("example-category-topic", orderDto);
+        orderProducer.send("orders", orderDto);
 
         ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
 
