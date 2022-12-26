@@ -2,15 +2,15 @@ package com.example.userservice.service;
 
 import com.example.userservice.client.OrderServiceClient;
 import com.example.userservice.dto.UserDto;
-import com.example.userservice.error.FeignErrorDecoder;
 import com.example.userservice.jpa.User;
 import com.example.userservice.jpa.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
-import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     OrderServiceClient orderServiceClient;
+
+    @Autowired
+    CircuitBreakerFactory circuitBreakerFactory;
 
     // BCryptPasswordEncoder는 초기 스프링 구동시 초기화 되도록 설정
 //    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
@@ -91,7 +94,14 @@ public class UserServiceImpl implements UserService {
 //        } catch (FeignException exception) {
 //            log.error(exception.getMessage());
 //        }
-        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+        /* Error Decoder */
+//        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+
+        /* CircuitBreaker */
+        CircuitBreaker circuitbreaker = circuitBreakerFactory.create("circuitbreaker");
+        List<ResponseOrder> ordersList = circuitbreaker.run(() -> orderServiceClient.getOrders(userId),
+                throwable -> new ArrayList<>());
+
         userDto.setOrders(ordersList);
 
         return userDto;
